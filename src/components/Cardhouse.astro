@@ -1,0 +1,14 @@
+---
+const { adresse, nomMaison } = Astro.props;
+---
+<button class="bg-slate-600" x-on:click="favori = !favori">favori</button>
+<div class="bg-gray-100 p-4 rounded shadow mb-4">
+<ul>
+    <li class="">{adresse}</li>
+    <li class="">{nomMaison}</li>
+</ul>
+</div>
+
+
+
+    
