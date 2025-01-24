@@ -2,7 +2,7 @@
 import Card from '../components/Card.astro'
 import Layout from '../layouts/Base.astro'
 import Cardhouse from '../components/Cardhouse.astro'
-import type { ACTION_ERROR_CODES, ACTION_QUERY_PARAMS, ActionError } from 'astro:actions'
+
 const offres = [
     {
         "adresse": "2821 Lake Sevilla, Palm Harbor, TX",
@@ -50,12 +50,7 @@ const offres = [
     <p class="text-base">
         Découvrez nos différentes offres pour répondre à vos besoins.
     </p>
-    <!-- <div>
-        {offres.map((offre)=>(
-        <Cardhouse {...offre}   />
-        ))
-        }
-    </div> -->
+   
 
     <div x-data="{ showFavorites: false }">
         <button @click="showFavorites = !showFavorites">
