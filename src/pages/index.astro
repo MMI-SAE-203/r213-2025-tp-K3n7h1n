@@ -1,12 +1,33 @@
 ---
 import Layout from '../layouts/Base.astro'
+import Cardhouse from '../components/Cardhouse.astro'
+import { getOffres } from '../js/backend.mjs'
+
+const allOffres = await getOffres()
+const favoriteOffres = allOffres.filter(offre => offre.favori)
 ---
-<Layout title="Accueil" class="font-mono" >
-	<h1 class="text-center ">Accueil</h1>
-	<div class="mt-4 p-4 bg-gray-100 rounded shadow">
-		<p class="text-gray-700 mb-2">Bienvenue sur notre page d'accueil.</p>
-		<button  class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded">
-			<a href="Demande" >faire une demande </a>
-		</button>
+
+<Layout title="Accueil" class="font-mono">
+	<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+		<h1 class="text-3xl font-bold text-center mb-8">Accueil</h1>
+		
+		<div class="mt-4 p-6 bg-gray-100 rounded-lg shadow-md mb-12">
+			<p class="text-gray-700 mb-4">Bienvenue sur notre page d'accueil.</p>
+			<button class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded transition duration-300 ease-in-out">
+				<a href="/Demande" class="text-white no-underline">Faire une demande</a>
+			</button>
+		</div>
+
+		<h2 class="text-2xl font-semibold mb-6">Offres favorites</h2>
+		
+		{favoriteOffres.length > 0 ? (
+			<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+				{favoriteOffres.map((offre) => (
+					<Cardhouse {...offre} />
+				))}
+			</div>
+		) : (
+			<p class="text-gray-600 text-center">Aucune offre favorite pour le moment.</p>
+		)}
 	</div>
 </Layout>
