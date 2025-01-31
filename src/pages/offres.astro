@@ -10,34 +10,103 @@ console.log(offres);
 
 ---
 <Layout titre="Offres">
-    <h1 class="text-2xl font-bold mb-4">Offre</h1>
-    <h2 class="text-xl font-semibold mb-2">Offres disponibles</h2>
-    <ul class="list-disc list-inside mb-4">
-        <li>Offre 1</li>
-        <li>Offre 2</li>
-    </ul>
-
-    <p class="text-base">
-        Découvrez nos différentes offres pour répondre à vos besoins.
-    </p>
-   
-
-    <div x-data="{ showFavorites: false }">
-        <button 
-          class="px-4 py-2 bg-blue-500 text-white rounded shadow hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          @click="showFavorites = !showFavorites"
-        >
-          <span x-show="!showFavorites">Afficher les favoris</span>
-          <span x-show="showFavorites">Afficher tout</span>
-        </button>
-        <div x-show="!showFavorites">
-          {offres.map((offre) => <Cardhouse {...offre} />)}
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <h1 class="text-4xl font-extrabold text-gray-900 mb-8">Nos Offres</h1>
+        
+        <div class="bg-white shadow overflow-hidden sm:rounded-lg mb-8">
+            <div class="px-4 py-5 sm:px-6">
+                <h2 class="text-2xl font-semibold text-gray-800">Offres disponibles</h2>
+                <p class="mt-1 max-w-2xl text-sm text-gray-500">Découvrez nos différentes offres pour répondre à vos besoins.</p>
+            </div>
+            <div class="border-t border-gray-200">
+                <ul class="divide-y divide-gray-200">
+                    <li class="px-4 py-4 sm:px-6">Offre 1</li>
+                    <li class="px-4 py-4 sm:px-6">Offre 2</li>
+                </ul>
+            </div>
         </div>
-        <div x-show="showFavorites">
-          {offres.map((offre) => 
-            offre.favori && <Cardhouse {...offre} />
-          )}
+
+        <div x-data="{ showFavorites: false, viewMode: 'grid' }" class="space-y-6">
+            <div class="flex flex-wrap gap-4">
+                <button 
+                    class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                    @click="showFavorites = !showFavorites"
+                >
+                    <span x-show="!showFavorites">Afficher les favoris</span>
+                    <span x-show="showFavorites">Afficher tout</span>
+                </button>
+                <button 
+                    class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+                    @click="viewMode = 'grid'"
+                    :class="{ 'ring-2 ring-offset-2 ring-green-500': viewMode === 'grid' }"
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                        <path d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM11 13a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+                    </svg>
+                    Grille
+                </button>
+                <button 
+                    class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-yellow-600 hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500"
+                    @click="viewMode = 'list'"
+                    :class="{ 'ring-2 ring-offset-2 ring-yellow-500': viewMode === 'list' }"
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd" />
+                    </svg>
+                    Liste
+                </button>
+            </div>
+
+            <div x-show="!showFavorites">
+                <div x-show="viewMode === 'grid'" class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                    {offres.map((offre) => <Cardhouse {...offre} />)}
+                </div>
+                <div x-show="viewMode === 'list'" class="space-y-4">
+                    {offres.map((offre) => (
+                        <div class="bg-white shadow overflow-hidden sm:rounded-lg hover:shadow-lg transition-shadow duration-300">
+                            <div class="px-4 py-5 sm:px-6">
+                                <h3 class="text-lg leading-6 font-medium text-gray-900">{offre.titre}</h3>
+                                <p class="mt-1 max-w-2xl text-sm text-gray-500">{offre.adresse}</p>
+                            </div>
+                            <div class="border-t border-gray-200 px-4 py-5 sm:p-0">
+                                <dl class="sm:divide-y sm:divide-gray-200">
+                                    
+                                    <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                                        <dt class="text-sm font-medium text-gray-500">Prix</dt>
+                                        <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{offre.prix} €</dd>
+                                    </div>
+                                </dl>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </div>
+
+            <div x-show="showFavorites">
+                <div x-show="viewMode === 'grid'" class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                    {offres.map((offre) => offre.favori && <Cardhouse {...offre} />)}
+                </div>
+                <div x-show="viewMode === 'list'" class="space-y-4">
+                    {offres.map((offre) => offre.favori && (
+                        <div class="bg-white shadow overflow-hidden sm:rounded-lg hover:shadow-lg transition-shadow duration-300">
+                            <div class="px-4 py-5 sm:px-6">
+                                <h3 class="text-lg leading-6 font-medium text-gray-900">{offre.titre}</h3>
+                                <p class="mt-1 max-w-2xl text-sm text-gray-500">{offre.adresse}</p>
+                            </div>
+                            <div class="border-t border-gray-200 px-4 py-5 sm:p-0">
+                                <dl class="sm:divide-y sm:divide-gray-200">
+                                  
+                                    </div>
+                                    <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                                        <dt class="text-sm font-medium text-gray-500">Prix</dt>
+                                        <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{offre.prix} €</dd>
+                                    </div>
+                                </dl>
+                            </div>
+                        
+                    ))}
+                </div>
+            </div>
         </div>
-      </div>
-      
-</Layout>    
+    </div>
+</Layout>
