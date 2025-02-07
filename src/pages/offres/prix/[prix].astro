@@ -1,0 +1,39 @@
+---
+import { getOffres } from '../../../js/backend.mjs';
+import Base from '../../../layouts/Base.astro';
+
+
+const {prix} = Astro.params;
+
+let min = prix?.split(',')[0];
+let max = prix?.split(',')[1];
+// Récupère toutes les offres
+console.log('test', min, max);
+
+const offres = await getOffres();
+
+
+// Filtre les offres dont la surface est supérieure à la valeur spécifiée
+
+const filteredOffres = offres.filter(offre => offre.prix <= max && offre.prix >= min);
+
+---
+
+<Base>
+  <h2>Maisons avec un prix inférieur à {prix} €</h2>
+  <ul>
+    {filteredOffres.map(offre => (
+      <li>
+        {offre.nomMaison} - {offre.prix} €
+      </li>
+    ))}
+  </ul>
+  <h2>Maisons avec un prix compris entre {min} € et {max} €</h2>
+  <ul>
+    {filteredOffres.map(offre => (
+      <li>
+        {offre.nomMaison} - {offre.prix} €
+      </li>
+    ))}
+  </ul>
+</Base>
