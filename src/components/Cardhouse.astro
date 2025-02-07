@@ -19,4 +19,5 @@ const { ...offre } = Astro.props;
     >
         {offre.favori ? 'Favoris' : 'Non favoris'}
     </button>
+    <a href={`/offres/${offre.id}`}>Voir plus</a>
 </div>
