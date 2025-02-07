@@ -1,0 +1,28 @@
+---
+import { getOffres } from '../../../js/backend.mjs';
+import Base from '../../../layouts/Base.astro';
+
+const { surface } = Astro.params;
+const surfaceMin = Number(80);
+
+// Récupère toutes les offres
+const offres = await getOffres();
+
+// Filtre les offres dont la surface est supérieure à la valeur spécifiée
+const filteredOffres = offres.filter(offre => offre.surface >= surfaceMin);
+
+if(filteredOffres.length === 0){
+    return Astro.redirect('/offres');
+}
+---
+
+<Base>
+  <h2>Maisons avec une surface supérieure à {surfaceMin} m²</h2>
+  <ul>
+    {filteredOffres.map(offre => (
+      <li>
+        {offre.nomMaison} - {offre.surface}m²
+      </li>
+    ))}
+  </ul>
+</Base>
