@@ -2,11 +2,31 @@
 import Card from '../../components/Card.astro'
 import Layout from '../../layouts/Base.astro'
 import Cardhouse from '../../components/Cardhouse.astro'
-import { getOffres } from '../../js/backend.mjs'
+import { getOffres, filterByPrix } from '../../js/backend.mjs'
 const { ...offre } = Astro.props;
-const offres = await getOffres()
+let offres = await getOffres()
 
 console.log(offres);
+
+let message = '';
+if (Astro.request.method === "POST") {
+    const data = await Astro.request.formData();
+    const minPrix = parseInt(data.get("minPrix"));
+    const maxPrix = parseInt(data.get("maxPrix"));
+
+    if (minPrix > 0 && maxPrix > 0 && maxPrix > minPrix) {
+        offres = await filterByPrix(minPrix, maxPrix);
+        if (offres.length === 0) {
+            message = `Pas d'offres entre ${minPrix}€ et ${maxPrix}€`;
+        } else {
+            message = `Liste des offres entre ${minPrix}€ et ${maxPrix}€`;
+        }
+    } else {
+        message = "Veuillez entrer des valeurs valides pour le prix.";
+    }
+} else {
+    offres = await getOffres();
+}
 
 
 ---
@@ -25,7 +45,34 @@ console.log(offres);
                     <li class="px-4 py-4 sm:px-6">Offre 2</li>
                     <li class="px-4 py-4 sm:px-6" ><a href={`/offres/surface/80${offre.id}`}>maisons supérieure à 80 m² </a></li>
                 </ul>
+                
             </div>
+            <div class="max-w-md mx-auto mt-8 p-6 bg-white rounded-lg shadow-md">
+                <form action="/offres" method="POST" class="space-y-4">
+                  <div class="flex space-x-4">
+                    <input 
+                      type="number" 
+                      name="minPrix" 
+                      placeholder="Prix minimum" 
+                      required min="0"
+                      class="flex-1 p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    />
+                    <input 
+                      type="number" 
+                      name="maxPrix" 
+                      placeholder="Prix maximum" 
+                      required min="0"
+                      class="flex-1 p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    />
+                  </div>
+                  <input 
+                    type="submit" 
+                    value="Filtrer par prix" 
+                    class="w-full py-2 px-4 bg-blue-600 hover:bg-blue-700 focus:ring-blue-500 focus:ring-offset-blue-200 text-white transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 rounded-lg cursor-pointer"
+                  />
+                </form>
+                <p class="mt-4 text-sm text-gray-600">{message}</p>
+              </div>
         </div>
 
         <div x-data="{ showFavorites: false, viewMode: 'grid' }" class="space-y-6">
