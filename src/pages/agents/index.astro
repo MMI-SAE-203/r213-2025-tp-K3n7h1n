@@ -1,0 +1,33 @@
+---
+import Layout from '../../layouts/Base.astro'
+import { getAgents } from '../../js/backend.mjs'
+import CardAgents from '../../components/CardAgents.astro'
+
+const allagent = await getAgents()
+
+---
+
+<Layout title="Accueil" class="font-mono">
+	<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+		<h1 class="text-3xl font-bold text-center mb-8">Agents</h1>
+		
+		<div class="mt-4 p-6 bg-gray-100 rounded-lg shadow-md mb-12">
+			<p class="text-gray-700 mb-4">Ajouter votre d'Agents</p>
+			<button class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded transition duration-300 ease-in-out">
+				<a href="/agents/add" class="text-white no-underline">Faire une demande</a>
+			</button>
+		</div>
+
+		<h2 class="text-2xl font-semibold mb-6">Agents</h2>
+		
+		{allagent?.length > 0 ? (
+			<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+				{allagent?.map((agent) => (
+					<CardAgents {...agent} />
+				))}
+			</div>
+		) : (
+			<p class="text-gray-600 text-center">Aucun agents est disponible pour le moment.</p>
+		)}
+	</div>
+</Layout>

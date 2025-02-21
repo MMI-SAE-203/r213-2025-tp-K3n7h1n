@@ -1,0 +1,30 @@
+---
+
+import { getAgent } from '../../js/backend.mjs';
+import Base  from '../../layouts/Base.astro';
+
+const { id } = Astro.params;
+const agent = await getAgent(id);
+if(!agent){
+   return Astro.redirect('/offres');
+}
+---
+
+<Base titre={agent?.Nom}>
+    <div class="bg-gradient-to-r from-blue-500 to-purple-600 min-h-screen py-8 px-4 sm:px-6 lg:px-8">
+      <div class="max-w-3xl mx-auto bg-white rounded-lg shadow-xl overflow-hidden">
+        <div class="p-8">
+          <h2 class="text-3xl font-bold text-gray-800 mb-6">{agent?.Prenom}</h2>
+          <ul class="space-y-4">
+            <li class="flex items-center text-gray-600">
+                <span class="text-2xl font-bold text-indigo-600"> {agent?.adresse}</span>
+             
+            </li>
+            <li class="flex items-center text-gray-600">
+              <span class="text-2xl font-bold text-indigo-600">{agent?.email}</span>
+            
+          </ul>
+        </div>
+      </div>
+    </div>
+  </Base>

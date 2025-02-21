@@ -83,3 +83,42 @@ export async function filterByPrix(prixMin, prixMax) {
         return [];
     }
 }
+
+export async function getAgent(id) {
+    try {
+        let data = await pb.collection('Agents').getOne(id);
+        data.imageUrl = pb.files.getURL(data, data.image);
+        return data;
+    } catch (error) {
+        console.log('Une erreur est survenue en lisant la maison', error);
+        return null;
+    }
+}
+
+export async function getAgents() {
+    try {
+        let data = await pb.collection('Agents').getFullList({
+            sort: '-created',
+        });
+        return data;
+    } catch (error) {
+        console.log('Une erreur est survenue en lisant la maison', error);
+        return null;
+    }
+}
+
+export async function addAgent(agent) {
+    try {
+        await pb.collection('Agents').create(agent);
+        return {
+            success: true,
+            message: 'Agent ajoutee avec succes'
+        };
+    } catch (error) {
+        console.log('Une erreur est survenue en ajoutant un Agent', error);
+        return {
+            success: false,
+            message: 'Une erreur est survenue en ajoutant un Agent'
+        };
+    }
+}
